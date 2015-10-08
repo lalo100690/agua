@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AGUADOR</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+</head>
+<body>
+
+<div id="encabezado">
+	<div class="triangulo"></div>
+	<h1>Agregar</h1>
+</div>
+
+<div id="contenido">
+	<h1 id="no-vasos">0</h1>
+    
+	<button id="boton-agregar" onclick="agregarVaso()"><img src="vaso_agregar.png"></button>
+    
+</div>
+    
+    <div id="mensaje">
+        <h1>Felicidades!</h1>
+        <p>Acabaste por hoy :)</p>
+    </div>
+    
+<style type="text/css">
+    
+    #mensaje{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 999999999;
+        background: rgba(255,255,255,.8);
+        /*DESAPARECER*/
+        -webkit-transform:scale(.1);
+        visibility: hidden;
+        opacity: 0;
+    }
+    
+        #mensaje>h1{
+            font-size: 3em;
+            color: #0c668d;
+            -webkit-transform:rotate(-5deg);
+            text-align: center;
+            margin-top: 60%;
+        }
+    
+        #mensaje>p{
+            font-size: 2em;
+            color: #0c668d;
+            text-align: center;
+            -webkit-transform:rotate(-3deg);
+        }
+    
+	*{margin:0px;padding: 0px; font-family: arial narrow}
+
+	#encabezado{
+		width: 100%;
+		height: 10%;
+		/*background: red;*/
+		float: left;
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+	}
+        #encabezado>h1{
+            text-align: center;
+            color: #0c668d;
+            font-size: 1.6em;
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+    
+        .triangulo{
+            width: 0px;
+            height: 0px;
+            float: left;
+            border-top: 5px solid #fa1fbb;
+            border-right: 5px solid transparent;
+            border-left: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            position: absolute;
+            left: 50%;
+            margin-left: -5px;
+            margin-top: 3px;
+        }
+        
+    
+    #contenido{
+        width: 100%;
+        height: 90%;
+        float: left;
+        position: fixed;
+        top: 10%;
+        left: 0px;
+        right: 0px;
+    }
+    
+        #contenido>h1{
+            position: absolute;
+            font-size: 16em;
+            font-weight: normal;
+            text-align: center;
+            width: 100%;
+            color: #0c668d;
+            line-height: 1.5;
+            z-index: 99999;
+        }
+    
+        #contenido>button{
+            position: absolute;
+            width: 20%;
+            background: #043952;
+            left: 50%;
+            bottom:5%;
+            margin-left: -10%;
+            border: none;
+            height: 20%;
+            border-radius: 50%; 
+            z-index: 99999;
+            outline: none;  
+        }
+    
+    
+        .vaso{
+            width: 100%;
+            height: 20%;/*TEMPORAL*/
+            border-bottom: 2px solid #e7edeb;
+            float: left;
+            position: relative;
+        }
+    
+        #agua{
+            width: 100%;
+            height: 100%;
+            top: 100%;
+            /*margin-top: -20%;*/
+            background: #00b9d4;
+            opacity: .8;
+            float: left;
+            position: absolute;
+            z-index: -1;
+        }
+    
+    body,html{
+        height: 100%;
+        overflow: hidden;
+    }
+    body{
+        background: #fff;  
+    }
+</style>
+
+<div id="agua"></div>
+    
+    
+    <script>
+        
+        window.addEventListener('load',iniciar,true);
+        
+        function iniciar(){
+            //NUMERO DE VASOS REAL
+            document.getElementById('no-vasos').innerHTML = localStorage.getItem('vasosTomados');
+            
+            //HACER BOTON CIRCULAR
+            anchuraBoton = document.getElementById('boton-agregar').offsetWidth;
+            document.getElementById('boton-agregar').style.height=anchuraBoton+"px";
+            
+            //OBTENEMOS EL NUMERO DE VASOS
+            vasos = localStorage.getItem('vasos');
+            
+            //OBTENEMOS LA ALTURA DEL CONTENEDOR
+            alturaContenedor = document.getElementById('contenido').offsetHeight;
+            
+            //CALCULAMOS LA ALTURA DE CADA VASO
+            alturaVaso = parseInt(alturaContenedor)/parseInt(vasos);
+            
+            //SI YA HABIA VASOS, CARGAR EL MARGEN
+            if(localStorage.getItem('vasosTomados')){
+                vasosTomados = localStorage.getItem('vasosTomados');
+                margenInicial = vasosTomados * alturaVaso;
+                animarAgua()
+                document.getElementById('agua').style.marginTop = "-" + margenInicial + "px";
+                if(vasosTomados==vasos){
+                    document.getElementById('mensaje').style.transition=".3s all";
+                    document.getElementById('mensaje').style.visibility="visible";
+                    document.getElementById('mensaje').style.opacity="1";
+                    document.getElementById('mensaje').style.webkitTransform="scale(1)";
+                }
+            }
+            
+            
+            //CREAMOS LOS VASOS NECESARIOS CON LA ALTURA CALCULADA
+            i=0;
+            while(i<vasos){
+                vaso = '<div class="vaso" style="height:'
+                        +alturaVaso+
+                        'px"><img src="vaso.png"></div>'
+                document.getElementById('contenido').innerHTML+=vaso;
+                i++;
+            }
+            
+            //CREAR LA VARIABLE LOCAL DE NUMERO DE VASOS DE AGUA TOMADOS
+            if(localStorage.getItem('vasosTomados')){
+                noVasos = localStorage.getItem('vasosTomados');
+            }else{
+                noVasos = 0;
+                localStorage.setItem('vasosTomados', noVasos);
+            }   
+            
+            
+        }
+        
+        function agregarVaso(){
+            //INCREMENTAR CONTADOR DE VASOS Y ALMACENARLO
+            noVasos++;
+            localStorage.setItem('vasosTomados', noVasos);
+            
+            //GUARDAMOS EL DIV AGUA COMO UNA VARIABLE AGUA
+            agua = document.getElementById('agua');
+            
+            //OBTENEMOS LOS ESTILOS DEL DIV AGUA
+            margen = window.getComputedStyle(agua);
+            
+            //CALCULAMOS EN ENTERO EL MARGEN SUPERIOR
+            margen = parseInt(margen.marginTop);
+            
+            //CALCULAMOS CUANTO SE DESPLAZARA HACIA ARRIBA
+            margenNuevo = margen-alturaVaso;
+            
+            //ASIGNARLE EL NUEVO MARGEN
+            if(noVasos<vasos){
+                animarAgua();
+                agua.style.marginTop = margenNuevo + "px";
+                document.getElementById('no-vasos').innerHTML = noVasos;
+            }else{
+                animarAgua();
+                agua.style.marginTop = margenNuevo + "px";
+                document.getElementById('no-vasos').innerHTML = noVasos;
+                document.getElementById('mensaje').style.transition=".3s all";
+                document.getElementById('mensaje').style.visibility="visible";
+                document.getElementById('mensaje').style.opacity="1";
+                document.getElementById('mensaje').style.webkitTransform="scale(1)";
+                
+            }
+        }
+        
+        function animarAgua(){
+            agua = document.getElementById('agua');
+            agua.style.transition = ".5s all";
+            agua.style.width="200%";
+            agua.style.marginLeft="-50%";
+            //setTimeout(funcion,retardo)
+            setTimeout(function(){agua.style.webkitTransform="rotate(10deg)"},10);
+            setTimeout(function(){agua.style.webkitTransform="rotate(-10deg)"},300);
+            setTimeout(function(){agua.style.webkitTransform="rotate(5deg)"},600);
+            setTimeout(function(){agua.style.webkitTransform="rotate(-5deg)"},900);
+            setTimeout(function(){agua.style.webkitTransform="rotate(0deg)"},1200);
+        }
+    
+    </script>
+
+</body>
+</html>

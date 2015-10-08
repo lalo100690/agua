@@ -1,0 +1,94 @@
+<html>
+<head>
+    <title>REGISTRO AGUADOR</title>
+    <meta name="viewport" content="width=device-width, user-scalabe=no">
+</head>
+<body>
+    
+    <h1>AGUADOR</h1>
+    <input type="text" placeholder="Facebook ID" id="fbid">
+    <input type="text" placeholder="Nombre" id="nombre">
+    <input type="text" placeholder="Peso (KG)" id="peso">
+    <input type="number" placeholder="Edad" id="edad">
+    <input type="number" placeholder="Altura (MTS)" id="altura">
+    <button onclick="registro()">Registrarme</button>
+    
+<script>
+    function registro(){
+        //GUARDAMOS LOS DATOS EN VARIABLES
+        fbid=document.getElementById('fbid').value;
+        nombre=document.getElementById('nombre').value;
+        peso=document.getElementById('peso').value;
+        edad=document.getElementById('edad').value;
+        altura=document.getElementById('altura').value;
+        
+        //CONVERTIMOS EL PESO DE KG A LIBRAS
+        pesoLibras = peso / .454;
+        
+        //CALCULAMOS EL NUMERO DE VASOS
+        //Dividimos el peso entre dos para convertirlo a onzas,
+        //despues dividimos entre 8 porque son las onzas en una taza,
+        //asi calculamos el numero de tazas de 8 onzas que debemos tomar.
+        vasos = (pesoLibras/2)/8;
+        vasos = Math.round(vasos);
+        
+        //GUARDAR EN LOCALSTORAGE Y REDIRECCIONAR
+        localStorage.setItem('fbid',fbid)
+        localStorage.setItem('nombre',nombre)
+        localStorage.setItem('peso',peso)
+        localStorage.setItem('edad',edad)
+        localStorage.setItem('altura',altura)
+        localStorage.setItem('vasos',vasos);
+        
+        window.location.assign('index2.html')
+    }
+</script>
+    
+</body>
+    <style>
+        h1{
+            text-align: center;
+            font-weight: normal;
+            font-size: 1.6em;
+            color: #0c668d;
+            float: left;
+            width: 100%;
+            margin-top: 30px;
+        }
+        
+        input[type="text"]{
+            width: 80%;
+            margin-left: 10%;
+            height: 40px;
+            float: left;
+            border-radius: 3px;
+            border: 1px solid #0c668d;
+            margin-top: 10px;
+            padding-left: 5px;
+        }
+        
+        input[type="number"]{
+            width: 35%;
+            margin-left: 10%;
+            height: 40px;
+            float: left;
+            border-radius: 3px;
+            border: 1px solid #0c668d;
+            margin-top: 10px;
+            padding-left: 5px;
+        }
+        
+        button{
+            width: 80%;
+            margin-left: 10%;
+            height: 40px;
+            background: #0c668d;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 3px;
+            border: none;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+    </style>
+</html>
